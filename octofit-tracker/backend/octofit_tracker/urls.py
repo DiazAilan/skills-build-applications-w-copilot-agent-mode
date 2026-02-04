@@ -13,11 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+import os
 from django.contrib import admin
 from django.urls import path, include
-from octofit_tracker import urls as app_urls
+from django.http import JsonResponse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('octofit_tracker.urls')),
+    path('api/', include('octofit_tracker.urls')),
+    path('', lambda request: JsonResponse({
+        "api_root": f"https://{os.environ.get('CODESPACE_NAME', 'localhost')}-8000.app.github.dev/api/",
+        "note": "Replace [component] with your API endpoint, e.g., /api/activities/"
+    })),
 ]
